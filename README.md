@@ -1,6 +1,4 @@
 # Viet Pham Portfolio Website
 
-Hi!
+Beta site of victorpham1997.github.io
 
-Welcome to the source code of my portfolio website:
-https://victorpham1997.github.io/

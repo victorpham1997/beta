@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>three.js webgl - effects - ascii</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link type="text/css" rel="stylesheet" href="main.css">
+	</head>
+
+	<body>
+		<div id="info"><a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> - effects - ascii</div>
+
+		<script type="importmap">
+			{
+				"imports": {
+					"three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+					"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+				}
+			}
+		</script>
+
+		<script type="module">
+			import * as THREE from "https://cdn.skypack.dev/three@0.129.0/build/three.module.js";
+
+			// import * as THREE from 'three';
+
+			import { AsciiEffect } from 'three/addons/effects/AsciiEffect.js';
+			import { TrackballControls } from 'three/addons/controls/TrackballControls.js';
+
+			let camera, controls, scene, renderer, effect;
+
+			let sphere, plane;
+
+			const start = Date.now();
+
+			const segmentsSize = 25
+			const sizeX = window.innerWidth;
+			const sizeZ = window.innerHeight;
+			const segmentsX = sizeX/segmentsSize;
+			const segmentsZ = sizeZ/segmentsSize;
+			console.log(segmentsX, segmentsZ)
+			const geometry = new THREE.PlaneBufferGeometry(window.innerWidth, window.innerHeight, segmentsX, segmentsZ);
+			// geometry.rotateX(Math.PI * -0.5);
+			const material = new THREE.MeshBasicMaterial({
+				color: 0x555555,
+				wireframe: false,
+			});
+			const height = 0.5;
+
+
+			init();
+
+			function init() {
+				const frustumSize = 500;
+				const aspect = window.innerWidth / window.innerHeight;
+				// camera = new THREE.OrthographicCamera( window.innerWidth  / - 2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / - 2, 2, 1000 );
+				// camera.position.set( 0, 0, 500 );
+
+				camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 2, 1000 );
+				camera.position.z = 500;
+
+
+				scene = new THREE.Scene();
+				scene.background = new THREE.Color( 0, 0, 0 );
+
+				// const pointLight1 = new THREE.PointLight( 0xffffff, 3, 0, 0 );
+				// pointLight1.position.set( 500, 500, 500 );
+				// scene.add( pointLight1 );
+
+				// const pointLight2 = new THREE.PointLight( 0xffffff, 1, 0, 0 );
+				// pointLight2.position.set( - 500, - 500, - 500 );
+				// scene.add( pointLight2 );
+
+				// sphere = new THREE.Mesh( new THREE.SphereGeometry( 200, 20, 10 ), new THREE.MeshPhongMaterial( { flatShading: true } ) );
+				// scene.add( sphere );
+
+				// Plane2
+				// const pointLight1 = new THREE.PointLight( 0xffffff, 100, 10, 10 );
+				// pointLight1.position.set( 1000, 1000, 1000 );
+				// scene.add( pointLight1 );
+
+				// const pointLight2 = new THREE.PointLight( 0xffffff, 100, 10, 10 );
+				// pointLight2.position.set( - 500, - 500, - 500 );
+				// scene.add( pointLight2 );
+
+				const ambientLight = new THREE.AmbientLight( 0x888888 );
+				scene.add( ambientLight );
+
+				const directionalLight = new THREE.DirectionalLight( 0xffffff, 100 );
+				directionalLight.position.x = 20;
+				directionalLight.position.y = 10;
+				directionalLight.position.z = 100;
+				scene.add( directionalLight );
+
+				
+
+				
+
+				const terrain = new THREE.Mesh(geometry, material);
+				const totalSegmentsX = segmentsX + 1;
+				const totalSegmentsZ = segmentsZ + 1;
+				// for(let z = 0; z < totalSegmentsZ; z++) {
+				// 	for(let x = 0; x < totalSegmentsX; x++) {
+				// 		const index = 3 * (z * totalSegmentsX + x);
+
+				// 		geometry.attributes.position.array[index + 1] = Math.random();
+				// 	}
+				// }
+				// geometry.attributes.position.needsUpdate = true;
+				// geometry.computeVertexNormals();
+				
+
+
+
+				scene.add( terrain );
+
+
+
+
+				// Plane
+
+				// plane = new THREE.Mesh( new THREE.PlaneGeometry( window.innerWidth, window.innerHeight ), new THREE.MeshBasicMaterial( { color: 0xe0e0e0 } ) );
+				// plane.position.y = - 200;
+				// plane.rotation.x = - Math.PI / 2;
+				// scene.add( plane );
+
+				renderer = new THREE.WebGLRenderer();
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				renderer.setAnimationLoop( animate );
+
+				// effect = new AsciiEffect( renderer, ' .:-+*=%@#', { invert: true } );
+				// effect.setSize( window.innerWidth, window.innerHeight );
+				// effect.domElement.style.color = 'white';
+				// effect.domElement.style.backgroundColor = 'black';
+				// document.body.appendChild( effect.domElement );
+				// controls = new TrackballControls( camera, effect.domElement );
+
+				// Special case: append effect.domElement, instead of renderer.domElement.
+				// AsciiEffect creates a custom domElement (a div container) where the ASCII elements are placed.
+
+				document.body.appendChild( renderer.domElement );
+				controls = new TrackballControls( camera, renderer.domElement );
+				// controls.enabled = false;
+				//
+
+				window.addEventListener( 'resize', onWindowResize );
+
+			}
+
+			function onWindowResize() {
+
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				// effect.setSize( window.innerWidth, window.innerHeight );
+
+			}
+
+			const updateTerrainGeometry = function() {
+				const totalSegmentsX = segmentsX + 1;
+				const totalSegmentsZ = segmentsZ + 1;
+
+				// for(let z = 0; z < totalSegmentsZ; z++) {
+				// 	for(let x = 0; x < totalSegmentsX; x++) {
+				// 		const index = 3 * (z * totalSegmentsX + x);
+
+				// 		// this is where you would choose height based on the noise algorithm of your choice !
+				// 		geometry.attributes.position.array[index + 1] = Math.random() * height;
+				// 	}
+				// }
+				// for(let z = 0; z < totalSegmentsZ; z++) {
+				// 	// for(let x = 0; x < totalSegmentsX; x++) {
+				// 	// 	const index = 3 * (z * totalSegmentsX + x);
+
+				// 	// 	// this is where you would choose height based on the noise algorithm of your choice !
+				// 	geometry.attributes.position.array[2*z] = Math.random() * height;
+				// 	// }
+				// }
+
+				for(let z = 2; z < 1300*3-100; z = z+3) {
+
+					geometry.attributes.position.array[z] = Math.random() * 10;
+					// geometry.attributes.position.array[5] = Math.random() * 1;
+					// geometry.attributes.position.array[5] = Math.random() * 1;
+				}
+				// geometry.attributes.position.array[2] = Math.random() * 1;
+				// geometry.attributes.position.array[5] = Math.random() * 1;
+				// geometry.attributes.position.array[8] = Math.random() * 1;
+				// geometry.attributes.position.array[11] = Math.random() * 1;
+				// geometry.attributes.position.array[14] = Math.random() * 1;
+
+				// to to make sure our changes to the buffer attribute is taken into account
+				geometry.attributes.position.needsUpdate = true;
+
+				// compute normals so shading works properly
+				geometry.computeVertexNormals();
+			};
+
+			//
+
+			function animate() {
+
+				const timer = Date.now() - start;
+				updateTerrainGeometry();
+
+
+				// sphere.position.y = Math.abs( Math.sin( timer * 0.002 ) ) * 150;
+				// sphere.rotation.x = timer * 0.0003;
+				// sphere.rotation.z = timer * 0.0002;
+
+				controls.update();
+
+				renderer.render( scene, camera );
+
+			}
+
+		</script>
+
+	</body>
+</html>

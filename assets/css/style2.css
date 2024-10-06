@@ -1,6 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;400&family=Rajdhani:wght@300;400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Unica+One&display=swap');
+
+
+:root {
+  --pad: max(20px, 5vmin);
+}
 
 @media only screen and (orientation:portrait) {
    .content .table-profile { 
@@ -49,7 +56,7 @@ html, body {
   background: transparent;
   border: 1px solid rgba(255, 255, 255, .65);
   /* backdrop-filter: blur(1px); */
-  margin: max(20px, 5vmin);
+  margin: var(--pad);
   left: 0; 
   right: 0; 
   top: 0;
@@ -74,16 +81,92 @@ div.box {
   border-style: solid;
 }
 
-p.name {
-  margin: 2vmin;
-  font-size: 10vmin;
+div.header_box {
+  text-align:center;
+}
+
+p.header_title {
+  margin: 5vmin 3vmin 2vmin 3vmin;
+  font-size: 8vmin;
   color: white;
   background-color: #000;
   display: inline-block;
-  padding: 0.1em 0.01em;
+  padding: 0;
+  line-height: 0.75em;
   font-family: "Raleway", sans-serif;
-  font-weight: 200;
+  font-weight: 150;
 }
+
+p.header_label {
+  margin: 0 6vmin;
+  font-size: 2.5vmin;
+  color: white;
+  background-color: #000;
+  display: inline-block;
+  padding: 0;
+  line-height: 0.75em;
+  font-family: "Raleway", sans-serif;
+  font-weight: 150;
+}
+
+p.menu {
+  font-size: 3vmin;
+  margin-bottom: 3vmin;
+  color: white;
+  background-color: #000;
+  display: inline-block;
+  padding: 0;
+  line-height: 1em;
+  font-family: "Raleway", sans-serif;
+  font-weight: 150;
+}
+
+div.menu_box {
+  margin: 4vmin 4vmin;
+}
+
+div.option_box {
+  position: fixed;
+  right: var(--pad);
+  top: calc(var(--pad) - 1.25em );
+  font-size: 130%;
+  display: block;
+}
+
+.btn {
+  display: flex;
+  column-gap: 3px;
+  font-weight: 400;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+
+.btn:hover .btn_box {
+  background-color: red;
+}
+
+.btn:hover {
+  cursor: pointer;
+}
+
+.btn_box {
+  width: 11px;
+  height: 11px;
+  margin: auto;
+  border: 1px solid rgba(255, 255, 255, .65);
+  background-color: #000;
+}
+
+.btn_text {
+  background-color: #000;
+}
+
+
+
+
+
+
+
 
 
 

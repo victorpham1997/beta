@@ -48,8 +48,8 @@ document.body.appendChild(effect.domElement);
 // Define noise points
 let gridSizeW = w/(divider*gap);
 let gridSizeH = h/(divider*gap);
-const coords = [];
-const colors = [];
+let coords = [];
+let colors = [];
 let points = [];
 let x;
 let y;
@@ -66,6 +66,8 @@ function updateArr(gridW, gridH){
     // let x2 = x1 + 40;
     // let y1 = gridH - 20;
     // let y2 = y1 + 15;
+    // coords = [];
+    // colors = [];
     points = [];
     for (let i = -gridW; i < gridW; i += 1) {
         for (let j = -gridH; j < gridH; j += 1) {
@@ -170,16 +172,14 @@ function animate(timeStep) {
 animate(0);
 
 function handleWindowResize() {
-    camera.left = window.innerWidth  / - divider;
-    camera.right = window.innerWidth  /  divider;
-    camera.top = window.innerHeight  /  divider;
-    camera.bottom = window.innerHeight  / - divider;
+    camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     // renderer.setSize(window.innerWidth, window.innerHeight);
     
     gridSizeW =  window.innerWidth/(divider*gap);
     gridSizeH =  window.innerHeight/(divider*gap);
     updateArr(gridSizeW, gridSizeH)
+    pointsObj.geometry.attributes.position.needsUpdate = true;
     effect.setSize( window.innerWidth, window.innerHeight);
 }
 // effect.setSize( window.innerWidth, window.innerHeight );

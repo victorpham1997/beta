@@ -9,11 +9,14 @@
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
         <!-- Bulma Version 0.8.x-->
-        <link rel="stylesheet" href="https://unpkg.com/bulma@0.8.0/css/bulma.min.css" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">        
         <link rel="stylesheet" type="text/css" href="../assets/css/style2.css">
         <script src="https://smtpjs.com/v3/smtp.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/TextPlugin.min.js"></script>
         <script async type="text/javascript" src="../assets/js/email.js"></script>
-        <script async type="text/javascript" src="../assets/js/bulma.js"></script>
+        <!-- <script async type="text/javascript" src="../assets/js/main.js"></script> -->
+
         <!-- Global site tag (gtag.js) - Google Analytics -->
         <!-- Google tag (gtag.js) -->
         <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBQLD161PL"></script>
@@ -33,37 +36,76 @@
 
                 <div id="container" >
                         <div class="option_box">
-                                <div class="btn is-selected" :class="{ 'is-selected': $store.app.theme === 'dark' }">
+                                <div class="btn" id="theme_dark" >
+                                        <div class="btn_text shadow">Dark</div>
                                         <div class="btn_box"></div>
-                                        <div class="btn_text">Dark</div>
+                                        <div class="btn_text shadow">Light</div>
                                 </div>
+
                         </div>
 
                         <div id="frame">
-                                <div class="columns">
-                                        <div class="column has-text-left header_box ">
+                                <div class="columns contain-header ">
+                                        <div class="column is-two-third has-text-left  ">
                                                 <div>
-                                                        <p class ="header_title box">Viet Pham</p>
-                                                </div>
+                                                        <p class ="header_title box shadow-thick">Viet Pham</p>
+                                                </div>  
+
                                                 <div>
                                                         <p class ="header_label box">Developer X Designer</p>
                                                 </div>
                                         </div>
 
                                         <div class="column is-one-third has-text-right menu_box">
-                                                <div>
-                                                        <p class ="menu box">About</p>
-                                                </div>
-                                                <div>
-                                                        <p class ="menu box">Project</p>
-                                                </div>
-                                                <div>
-                                                        <p class ="menu box">Art</p>
-                                                </div>
+                                                <a href="#about">
+                                                        <p class ="menu_text box"  id="about">About</p>
+                                                </a>
+
+                                                <a href="#experience">
+                                                        <p class ="menu_text box "  id="experience">Experience</p>
+                                                </a>
+
+                                                <a href="#projects">
+                                                        <p class ="menu_text box "  id="projects">Projects</p>
+                                                </a>
+                                                
+                                                <a href="#art">
+                                                        <p class ="menu_text box "  id="art">Art</p>
+                                                </a>
+                                        </div>
+                                        
+                                </div>
+                                <div class="columns ">
+                                        <div class="column has-text-left content-box is-one-third is-three-quarters-mobile" id="about-content">
+                                                <p class ="content-text ">
+                                                        I am currently working as a Senior Data Engineer at Prudential Service Singapore. I graduated from Singapore University of Technology and Design (SUTD) in 2021 with a Bachelor in Computer Science.
+                                                        When I was young, I used to dream of becoming an architect. But my love for programming grew stronger and stronger until I joined SUTD and decided to take on a CS major.
+                                                        My passion for art, fortunately, is still carrying on as I often find time to do small sketches of things and people that I observe in my daily life.
+                                                </p>      
+
+                                        </div>
+
+                                        <div class="column has-text-left content-box is-one-third is-three-quarters-mobile" id="experience-content">
+                                                <p class ="content-text ">
+                                                        experience
+                                                </p>      
+
+                                        </div>
+
+                                        <div class="column has-text-left content-box is-one-third is-three-quarters-mobile" id="projects-content">
+                                                <p class ="content-text " >
+                                                        projects
+                                                </p>      
+
+                                        </div>
+                                        
+                                        <div class="column has-text-left content-box is-one-third is-three-quarters-mobile" id="art-content">
+                                                <p class ="content-text ">
+                                                        art
+                                                </p>      
+
                                         </div>
                                 </div>
-
-
                                 <!-- <a class="column is-full" href="https://threejs.org" target="_blank" rel="noopener">three.js</a> -->
 
                         </div>

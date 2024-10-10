@@ -2,52 +2,32 @@ import * as THREE from "https://cdn.skypack.dev/three@0.133.1";
 import { ImprovedNoise } from "https://cdn.skypack.dev/three@0.133.1/examples/jsm/math/ImprovedNoise.js";
 import { AsciiEffect } from "https://cdn.skypack.dev/three@0.133.1/examples/jsm/effects/AsciiEffect.js";
 import Stats  from "https://cdn.skypack.dev/three@0.133.1/examples/jsm/libs/stats.module.js";
+gsap.registerPlugin(TextPlugin) 
 
-// import * as THREE from 'three';
-// import { ImprovedNoise } from "three/addons/math/ImprovedNoise.js";
-// import { AsciiEffect } from "three/addons/effects/AsciiEffect.js";
+// Read from localStorage
+let darkTheme = localStorage.getItem("dark_theme");
+if (darkTheme==null){
+    darkTheme = true;
+    localStorage.setItem("dark_theme", darkTheme);
+}else{
+    darkTheme = (darkTheme == 'true');
+}
 
-// Define common var
+
+
+// site properties 
+var root = document.querySelector(':root');
+var style = getComputedStyle(root);
+
+
+// screen properties
 const w = window.innerWidth;
 const h = window.innerHeight;
-const rbgThreshold = 105;
-let divider = 200
-let ascii_set = ' .:/\\@#'
-let ascii_set2 = ' ._/\\0@'
-let bgColor =  'black'
-let r0 = 45;
-let g0 = 52;
-let b0 = 54;
-// rgb(45, 52, 54)
-let ascii_resolution = 0.1;
-let pSize = 10;
-let gap = 0.07;
+let divider = 200;
 
-// Define Scene
-const scene = new THREE.Scene();
-
-// Define Camera
-const camera = new THREE.OrthographicCamera( w / - divider,w / divider,h / divider, h / - divider, 2, 1000 );
-camera.position.z = 500;
-
-// Define Renderer
-// const canvas = document.querySelector("canvas");
-// const renderer = new THREE.WebGLRenderer({canvas: canvas});
-const renderer = new THREE.WebGLRenderer();
-renderer.setSize(w, h);
-
-// Define ascii effect
-const effect = new AsciiEffect( renderer, ascii_set2, { invert: true, resolution: ascii_resolution } );
-effect.setSize( w, h );
-// effect.domElement.style.color = `rgb(${r0}, ${g0}, ${b0})`;
-effect.domElement.style.color = `rgb(${r0}, ${g0}, ${b0})`;
-effect.domElement.style.backgroundColor = bgColor;
-
-document.body.appendChild(effect.domElement);
-
-// Define noise points
-let gridSizeW = w/(divider*gap);
-let gridSizeH = h/(divider*gap);
+// noise properties
+let gridSizeW;
+let gridSizeH;
 const coords = [];
 const colors = [];
 let points = [];
@@ -61,16 +41,131 @@ let point = {
     position: {},
     rate: 0.0,
 };
+
+// ascii properties
+const rbgThreshold = 255;
+let ascii_set = ' .:/\\@#'
+let ascii_set2 = ' ._/\\0@'
+let ascii_resolution = 0.1;
+// const [r0_d, g0_d, b0_d] = [45,52,54];
+const [r0_d, g0_d, b0_d] = [100,100,100];
+const [r0_l, g0_l, b0_l] = [189,195,199];
+let bgColor;
+let r0;
+let g0;
+let b0;
+let pSize = 10;
+let gap = 0.1;
+
+
+
+// Define Scene
+const scene = new THREE.Scene();
+
+// Define Camera
+const camera = new THREE.OrthographicCamera( w / - divider,w / divider,h / divider, h / - divider, 2, 1000 );
+camera.position.z = 500;
+
+// Define Renderer
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize(w, h);
+
+// Define ascii effect
+const effect = new AsciiEffect( renderer, ascii_set2, { invert: true, resolution: ascii_resolution } );
+effect.setSize( w, h );
+
+function initTheme(darkTheme){
+    if(darkTheme){
+        r0 = r0_d;
+        g0 = g0_d;
+        b0 = b0_d;
+        effect.domElement.style.backgroundColor = style.getPropertyValue('--background-color-dark');
+        effect.domElement.style.color = `black`,
+
+
+        root.style.setProperty('--border-color', style.getPropertyValue('--border-color-dark'));
+        root.style.setProperty('--font-color', style.getPropertyValue('--font-color-dark'));
+        root.style.setProperty('--background-color', style.getPropertyValue('--background-color-dark'));
+        root.style.setProperty('--theme-button-background', style.getPropertyValue('--theme-button-background-dark'));
+        gsap.to(effect.domElement.style, { 
+            duration: 1,
+            color: `rgb(${r0}, ${g0}, ${b0})`,
+        });
+
+    }else{
+
+        r0 = r0_l;
+        g0 = g0_l;
+        b0 = b0_l;
+        effect.domElement.style.backgroundColor = style.getPropertyValue('--background-color-light');
+        effect.domElement.style.color = 'white',
+
+        root.style.setProperty('--border-color', style.getPropertyValue('--border-color-light'));
+        root.style.setProperty('--font-color', style.getPropertyValue('--font-color-light'));
+        root.style.setProperty('--background-color', style.getPropertyValue('--background-color-light'));
+        root.style.setProperty('--theme-button-background', style.getPropertyValue('--theme-button-background-light'));
+        gsap.to(effect.domElement.style, { 
+            duration: 1,
+            color: `rgb(${r0}, ${g0}, ${b0})`,
+        });
+    }
+}
+
+function applyTheme(darkTheme){
+    if (darkTheme){
+        bgColor = style.getPropertyValue('--background-color-dark');
+        r0 = r0_d;
+        g0 = g0_d;
+        b0 = b0_d;
+
+        gsap.to(":root", { 
+            duration: getComputedStyle(root).getPropertyValue('--animation_duration'),
+            '--border-color': getComputedStyle(root).getPropertyValue('--border-color-dark'),
+            '--font-color': getComputedStyle(root).getPropertyValue('--font-color-dark'),
+            '--font-background-color': getComputedStyle(root).getPropertyValue('--font-background-color-dark'),
+            '--background-color': getComputedStyle(root).getPropertyValue('--background-color-dark'),
+            '--theme-button-background': getComputedStyle(root).getPropertyValue('--theme-button-background-dark'),
+        });
+
+
+    }else{
+        bgColor = style.getPropertyValue('--background-color-light');
+        r0 = r0_l;
+        g0 = g0_l;
+        b0 = b0_l;
+
+        gsap.to(":root", { 
+            duration: getComputedStyle(root).getPropertyValue('--animation_duration'),
+            '--border-color': getComputedStyle(root).getPropertyValue('--border-color-light'),
+            '--font-color': getComputedStyle(root).getPropertyValue('--font-color-light'),
+            '--font-background-color': getComputedStyle(root).getPropertyValue('--font-background-color-light'),
+            '--background-color': getComputedStyle(root).getPropertyValue('--background-color-light'),
+            '--theme-button-background': getComputedStyle(root).getPropertyValue('--theme-button-background-light'),    
+        });
+        
+    }
+    gsap.to(effect.domElement.style, { 
+        duration: 1,
+        backgroundColor: bgColor,
+      });
+    gsap.to(effect.domElement.style, { 
+        duration: 1,
+        color: `rgb(${r0}, ${g0}, ${b0})`,
+      });
+}
+initTheme(darkTheme);
+document.body.appendChild(effect.domElement);
+
+// Define noise effect
+
+
+
+gridSizeW = w/(divider*gap);
+gridSizeH = h/(divider*gap);
 function updateArr(gridW, gridH){
-    // let x1 = -gridW + 5;
-    // let x2 = x1 + 40;
-    // let y1 = gridH - 20;
-    // let y2 = y1 + 15;
     points = [];
     for (let i = -gridW; i < gridW; i += 1) {
         for (let j = -gridH; j < gridH; j += 1) {
-            // if( (i >= x1 || i <=x2) || (j > y1 || j <= y2)){
-            // if( i < x1 || i >=x2 || j < y1 || j >= y2){
             x = i * gap;
             y = j * gap;
             r = Math.random();
@@ -89,15 +184,16 @@ function updateArr(gridW, gridH){
             coords.push(x, y, z);
             colors.push(r, g, b);
         }
-        // }
     }
 }
-updateArr(gridSizeW, gridSizeH)
 
-// stat 
+updateArr(gridSizeW, gridSizeH);
+
+// Define stat tracking 
 let stats = new Stats();
 container.appendChild( stats.dom );
-// points
+
+// Define Points
 const geo = new THREE.BufferGeometry();
 geo.setAttribute("position", new THREE.Float32BufferAttribute(coords, 3));
 geo.setAttribute("color", new THREE.Float32BufferAttribute(colors, 3));
@@ -122,11 +218,14 @@ function updatePoints(t) {
         let {x, y, z } = p.position;
         coords.push(x, y, z);
     });
-    console.log(coords.length);
     geo.setAttribute("position", new THREE.Float32BufferAttribute(coords, 3));
     geo.setAttribute("color", new THREE.Float32BufferAttribute(cols, 3));
 }
+
 scene.add(pointsObj);
+
+
+// Helper functions
 
 function randomRGB(mult, val){
     let rand_val = Math.random();
@@ -138,36 +237,130 @@ function randomRGB(mult, val){
     return val
 }
 
-// var setRandomRGB = throttle(1000, function () {
-//     r0 = randomRGB(1, r0);
-//     g0 = randomRGB(1, g0);
-//     b0 = randomRGB(1, b0);
-//     effect.domElement.style.color = `rgb(${r0}, ${g0}, ${b0})`;
-//     console.log(`rgb(${r0}, ${g0}, ${b0})`)
-//     // console.log(timeStep)
-// })
-let i = 0;
+// Define html/css interacting functions
 
+// mouseenter tab
+function onHoverTab(tab){
+    const text0 = tab.textContent.split(' ')[0];
+
+    tab.addEventListener('mouseenter', () => {
+    gsap.to(`#${tab.id}`, {duration: text_animation_duration, text: text0 + " #"});
+    gsap.to(`#${tab.id}`, {duration: text_animation_duration, text: text0 + " _-", delay: text_animation_duration});
+    gsap.to(`#${tab.id}`, {duration: text_animation_duration, text: text0 + " <<", delay: text_animation_duration*2});
+    });
+
+    // Mouse leave event
+    tab.addEventListener('mouseleave', () => {
+        gsap.to(`#${tab.id}`, {duration: 0.25, text: text0 });
+    });
+}
+
+// onClick Switch tab
+// console.log(location.hash);
+const tabSwitchAnimationDuration = 0.25;
+
+function toggleTab(selectedTab) {
+    var tabs = document.querySelectorAll(".menu_text");
+
+    tabs.forEach(function(tab) {
+
+        if (tab.id == selectedTab) {
+                tab.classList.add("is-active");
+                // tab.textContent = tab.textContent.replace(/ </g, '');
+                // tab.textContent += ' <';
+                gsap.to(`#${tab.id}`, {duration: 0.2, text: tab.textContent.split(' ')[0] + " <", delay: 0.1});
+                // gsap.to(`#${tab.id}`, {duration: 0.2, text: tab.textContent.split(' ')[0] + " <", delay: 0.1});
+                gsap.to(`#${tab.id}-content`, {duration: tabSwitchAnimationDuration, display: 'block', opacity: 1, delay: tabSwitchAnimationDuration});
+
+        } else {
+            onHoverTab(tab);
+            if (tab.classList.contains("is-active")) {
+                tab.classList.remove("is-active");
+                // tab.textContent = tab.textContent.split(' ')[0];
+                gsap.to(`#${tab.id}`, {duration: 0.25, text: tab.textContent.split(' ')[0]});
+                gsap.to(`#${tab.id}-content`, {duration: tabSwitchAnimationDuration, display: 'none', opacity: 0});
+
+            }
+            else{
+                document.querySelector(`#${tab.id}-content`).style.display = 'none';
+                document.querySelector(`#${tab.id}-content`).style.opacity = 0;
+            };
+        }
+    });
+}
+  
+
+// Tab
+var tabs = document.querySelectorAll(".menu_text");
+const text_animation_duration = 0.07
+const active_id = location.hash.replace("#", "");
+
+// Init active tab
+if(active_id) {
+    tabs.forEach(function(tab) {
+        if (tab.id == active_id ) {
+            tab.classList.add("is-active");
+            gsap.to(`#${tab.id}-content`, {duration: 1, display: 'block', opacity: 1});
+
+        }else{
+            tab.classList.remove("is-active");
+        };
+    });
+};
+
+
+// Set tab event
+tabs.forEach(function(tab) {
+    // Mouse onclick event
+    tab.onclick = function(){toggleTab(tab.id, tabs)};
+
+    if (!tab.classList.contains("is-active")) {
+        onHoverTab(tab);
+
+
+    }else{
+        tab.textContent += ' <';
+    }
+});
+
+
+function switchTheme() {
+    // darkTheme = darkThemeBtn.classList.contains('is-active');
+    darkTheme = (localStorage.getItem("dark_theme") == 'true');
+    applyTheme(!darkTheme);
+    localStorage.setItem("dark_theme", !darkTheme);
+
+  
+  };
+
+document.getElementById("theme_dark").onclick = switchTheme;
+// switchTheme();
+
+// Define animation
+
+let i = 0;
 const timeMult = 0.0007;
 function animate(timeStep) {
     requestAnimationFrame(animate);
     updatePoints(timeStep * timeMult);
+    // applyTheme(darkTheme);
     effect.render(scene, camera);
     stats.update();
     if (timeStep > i*500){
-        r0 = randomRGB(1, r0);
-        g0 = randomRGB(1, g0);
-        b0 = randomRGB(1, b0);
+        r0 = randomRGB(0.1, r0);
+        g0 = randomRGB(0.1, g0);
+        b0 = randomRGB(0.1, b0);
         effect.domElement.style.color = `rgb(${r0}, ${g0}, ${b0})`;
         // console.log(`rgb(${r0}, ${g0}, ${b0})`)
-        console.log(points.length)
-        console.log(gridSizeW)
         i++;
     }
 }
 
 // START!
 animate(0);
+
+
+// Define window resize
 
 function handleWindowResize() {
     camera.left = window.innerWidth  / - divider;

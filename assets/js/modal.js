@@ -1,5 +1,6 @@
 document.querySelectorAll('#show').forEach(function(el) {
   el.addEventListener('click', function() {
+    console.log("ASDFasdfasd");
     var target = document.querySelector(el.getAttribute('data-target'));
     
     target.classList.add('is-active');

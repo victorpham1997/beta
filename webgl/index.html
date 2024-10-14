@@ -46,7 +46,7 @@
 
                         <div id="frame">
                                 <div class="columns contain-header ">
-                                        <div class="column is-two-third has-text-left  ">
+                                        <div id="header" class="column is-two-third has-text-left  ">
                                                 <div>
                                                         <p class ="header_title box shadow-thick">Viet Pham</p>
                                                 </div>  
@@ -66,18 +66,18 @@
                                                 </a>
 
                                                 <a href="#projects">
-                                                        <p class ="menu_text box "  id="projects">Projects</p>
+                                                        <p class ="menu_text box no-header"  id="projects">Projects</p>
                                                 </a>
                                                 
-                                                <a href="#art">
+                                                <a href="art">
                                                         <p class ="menu_text box "  id="art">Art</p>
                                                 </a>
                                         </div>
                                         
                                 </div>
                                 <div class="columns ">
-                                        <div class="column has-text-left content-box is-one-third is-three-quarters-mobile" id="about-content">
-                                                <p class ="content-text ">
+                                        <div class="column has-text-left content-box about-box  is-three-quarters-mobile background-blur " id="about-content">
+                                                <p class ="about-text ease" >
                                                         I am currently working as a Senior Data Engineer at Prudential Service Singapore. I graduated from Singapore University of Technology and Design (SUTD) in 2021 with a Bachelor in Computer Science.
                                                         When I was young, I used to dream of becoming an architect. But my love for programming grew stronger and stronger until I joined SUTD and decided to take on a CS major.
                                                         My passion for art, fortunately, is still carrying on as I often find time to do small sketches of things and people that I observe in my daily life.
@@ -85,22 +85,135 @@
 
                                         </div>
 
-                                        <div class="column has-text-left content-box is-one-third is-three-quarters-mobile" id="experience-content">
-                                                <p class ="content-text ">
-                                                        experience
-                                                </p>      
+                                        <div class="column content-box is-narrow experience-box background-blur " id="experience-content">
+
+                                                <div class="timeline ">
+                                                        <div></div>
+                                                        <div style="transform: translateX(-1.5em)" class="timeline-time">Present</div>
+                                                        <div></div>
+
+                                                        <div></div>
+                                                        <div class="timeline-middle"></div>
+                                                        <div><br></div>
+
+                                                        <div></div>
+                                                        <div></div>
+                                                        <p class ="experience-header has-text-left" >Prudential Service Singapore</p>
+
+
+                                                        <p class=" timeline-time">Apr 2023</p>
+                                                        <div class="timeline-middle">
+                                                                <div class="timeline-circle"></div>
+                                                        </div>
+                                                        <p class ="experience-subheader has-text-left" >Senior Data Engineer</p>
+
+
+                                                        <p class=" timeline-time">Oct 2021</p>
+                                                        <div class="timeline-middle">
+                                                                <div class="timeline-circle"></div>
+                                                        </div>
+                                                        <p class ="experience-subheader has-text-left" >Data Engineer</p>
+
+                                                        <p class=" timeline-time">May 2020</p>
+                                                        <div class="timeline-middle">
+                                                                <div class="timeline-circle"></div>
+                                                        </div>
+                                                        <p class ="experience-subheader has-text-left" >Data Analytics Intern</p>
+
+                                                        <div></div>
+                                                        <div></div>
+                                                        <p class ="experience-header has-text-left" >LionsBot International</p>
+
+                                                        <p class=" timeline-time">May 2019</p>
+                                                        <div class="timeline-middle">
+                                                                <div class="timeline-circle"></div>
+                                                        </div>
+                                                        <p class ="experience-subheader has-text-left" >Robotic Software Engineer Intern/ Part-time</p>
+                                                        
+                                                        <div></div>
+                                                        <div></div>
+                                                        <p class ="experience-header has-text-left" >Singapore University of Technology and Design</p>
+
+                                                        <p class=" timeline-time">May 2018</p>
+                                                        <div class="timeline-middle">
+                                                                <div class="timeline-circle"></div>
+                                                        </div>
+                                                        <p class ="experience-subheader has-text-left" >Computer Science</p>
+
+                                                </div>
 
                                         </div>
 
-                                        <div class="column has-text-left content-box is-one-third is-three-quarters-mobile" id="projects-content">
-                                                <p class ="content-text " >
-                                                        projects
-                                                </p>      
+                                        
+                                        <div class="column content-box is-full is-full-mobile has-text-left background-blur hide-scroll-bar projects-content" id="projects-content">
 
+                                                <div class="fixed-grid projects-box has-7-cols " >
+                                                        <a class="grid is-row-gap-3.5" href="bus_widget_ap" >
+                                                                <div class="cell is-col-span-2 word-break" id="cell">/fullstack/android/java</div>
+                                                                <div class="cell">Aug 2024</div>
+                                                                <div class="cell">app</div>
+                                                                <div class="cell project-title is-col-span-3">Bus-Timing-Widget.apk</div>
+                                                        </a>
+                                                        <a class="grid is-row-gap-3.5" href="mugen_ap">
+                                                                <div class="cell is-col-span-2 word-break">/ml/python/keras/React/GCP</div>
+                                                                <div class="cell">Aug 2021</div>
+                                                                <div class="cell">app</div>
+                                                                <div class="cell project-title is-col-span-3">jazz-generation.mp3</div>
+                                                        </a>
+                                                        <a class="grid is-row-gap-3.5" href="spine_ap" >
+                                                                <div class="cell is-col-span-2 word-break">/deepl/python/tensor</div>
+                                                                <div class="cell">Aug 2021</div>
+                                                                <div class="cell">research</div>
+                                                                <div class="cell project-title is-col-span-3">Spine-segmentation-analysis.ipynb</div>
+                                                        </a>
+                                                        <a class="grid is-row-gap-3.5"  href="liberate_ap"  >
+                                                                <div class="cell is-col-span-2 word-break">/AWS/python/nodejs/SQL</div>
+                                                                <div class="cell">Aug 2020</div>
+                                                                <div class="cell">webapp</div>
+                                                                <div class="cell project-title is-col-span-3">liberate.js</div>
+                                                        </a>
+                                                        <a class="grid is-row-gap-3.5"  href="snak3d_ap" >
+                                                                <div class="cell is-col-span-2 word-break">/eee/3d-print/fpga</div>
+                                                                <div class="cell">Feb 2019</div>
+                                                                <div class="cell">game</div>
+                                                                <div class="cell project-title is-col-span-3">SNAK3D.obj</div>
+                                                        </a>
+                                                        <a class="grid is-row-gap-3.5" href="infectio_ap"  >
+                                                                <div class="cell is-col-span-2 word-break">/android/Unity3D/game</div>
+                                                                <div class="cell">Aug 2019</div>
+                                                                <div class="cell">game</div>
+                                                                <div class="cell project-title is-col-span-3">Infectio.apk</div>
+                                                        </a>
+                                                        <a class="grid is-row-gap-3.5" href="blink_ap"  >
+                                                                <div class="cell is-col-span-2 word-break">/android/computer-vision/java</div>
+                                                                <div class="cell">Feb 2019</div>
+                                                                <div class="cell">game</div>
+                                                                <div class="cell project-title is-col-span-3">Blink.apk</div>
+                                                        </a>
+                                                        <a class="grid is-row-gap-3.5" href="urop_ap"   >
+                                                                <div class="cell is-col-span-2 word-break">/eee/3d-print/ardruino</div>
+                                                                <div class="cell">Feb 2019</div>
+                                                                <div class="cell">robotic</div>
+                                                                <div class="cell project-title is-col-span-3">under-water-bio-robot.txt</div>
+                                                        </a>
+                                                        <a class="grid is-row-gap-3.5" href="astar_ap">
+                                                                <div class="cell is-col-span-2 word-break">/eee/3d-print/ardruino</div>
+                                                                <div class="cell">Feb 2019</div>
+                                                                <div class="cell">research</div>
+                                                                <div class="cell project-title is-col-span-3">rehab.exe</div>
+
+                                                        </div>
+                                                </div>
+
+                                                
                                         </div>
+                                        <!-- <div class="content-box overflow-indicator" id="projects-content">
+                                                :
+                                        </div> -->
+                                               
                                         
                                         <div class="column has-text-left content-box is-one-third is-three-quarters-mobile" id="art-content">
-                                                <p class ="content-text ">
+                                                <p class ="about-text ">
                                                         art
                                                 </p>      
 

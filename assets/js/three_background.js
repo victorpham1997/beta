@@ -2,9 +2,19 @@ import * as THREE from "https://cdn.skypack.dev/three@0.133.1";
 import { ImprovedNoise } from "https://cdn.skypack.dev/three@0.133.1/examples/jsm/math/ImprovedNoise.js";
 import { AsciiEffect } from "https://cdn.skypack.dev/three@0.133.1/examples/jsm/effects/AsciiEffect.js";
 import Stats  from "https://cdn.skypack.dev/three@0.133.1/examples/jsm/libs/stats.module.js";
+import { GLTFLoader } from 'https://cdn.skypack.dev/three@0.133.1/examples/jsm/loaders/GLTFLoader.js';
+
 gsap.registerPlugin(TextPlugin) 
 
-// Read from localStorage
+// Define page to theme mapping
+var themeMap = {
+
+  };
+
+// Read from localStorage to obtain theme if needed
+const currentUrl = window.location.href;
+// if
+
 let darkTheme = localStorage.getItem("dark_theme");
 if (darkTheme==null){
     darkTheme = true;
@@ -15,9 +25,12 @@ if (darkTheme==null){
 
 
 
+
 // site properties 
 var root = document.querySelector(':root');
 var style = getComputedStyle(root);
+var content  = document.getElementById('projects-content');
+var overflowIndicator = document.querySelector('.overflow-indicator');
 
 
 // screen properties
@@ -41,6 +54,8 @@ let point = {
     position: {},
     rate: 0.0,
 };
+let theme;
+
 
 // ascii properties
 const rbgThreshold = 255;
@@ -48,7 +63,7 @@ let ascii_set = ' .:/\\@#'
 let ascii_set2 = ' ._/\\0@'
 let ascii_resolution = 0.1;
 // const [r0_d, g0_d, b0_d] = [45,52,54];
-const [r0_d, g0_d, b0_d] = [100,100,100];
+const [r0_d, g0_d, b0_d] = [45, 52, 54];
 const [r0_l, g0_l, b0_l] = [189,195,199];
 let bgColor;
 let r0;
@@ -75,85 +90,89 @@ const effect = new AsciiEffect( renderer, ascii_set2, { invert: true, resolution
 effect.setSize( w, h );
 
 function initTheme(darkTheme){
-    if(darkTheme){
-        r0 = r0_d;
-        g0 = g0_d;
-        b0 = b0_d;
-        effect.domElement.style.backgroundColor = style.getPropertyValue('--background-color-dark');
-        effect.domElement.style.color = `black`,
+    if( Object.keys(themeMap).some(v => currentUrl.includes(v))){
+        var mappedThemeStr = Object.keys(themeMap).find(v => currentUrl.includes(v));
 
-
-        root.style.setProperty('--border-color', style.getPropertyValue('--border-color-dark'));
-        root.style.setProperty('--font-color', style.getPropertyValue('--font-color-dark'));
-        root.style.setProperty('--background-color', style.getPropertyValue('--background-color-dark'));
-        root.style.setProperty('--theme-button-background', style.getPropertyValue('--theme-button-background-dark'));
-        gsap.to(effect.domElement.style, { 
-            duration: 1,
-            color: `rgb(${r0}, ${g0}, ${b0})`,
-        });
-
+        theme = themeMap[mappedThemeStr][0]
+        r0 = themeMap[mappedThemeStr][1][0];
+        g0 = themeMap[mappedThemeStr][1][1];
+        b0 = themeMap[mappedThemeStr][1][2]
     }else{
-
-        r0 = r0_l;
-        g0 = g0_l;
-        b0 = b0_l;
-        effect.domElement.style.backgroundColor = style.getPropertyValue('--background-color-light');
-        effect.domElement.style.color = 'white',
-
-        root.style.setProperty('--border-color', style.getPropertyValue('--border-color-light'));
-        root.style.setProperty('--font-color', style.getPropertyValue('--font-color-light'));
-        root.style.setProperty('--background-color', style.getPropertyValue('--background-color-light'));
-        root.style.setProperty('--theme-button-background', style.getPropertyValue('--theme-button-background-light'));
-        gsap.to(effect.domElement.style, { 
-            duration: 1,
-            color: `rgb(${r0}, ${g0}, ${b0})`,
-        });
+        if(darkTheme){
+            theme = 'dark'
+            r0 = r0_d;
+            g0 = g0_d;
+            b0 = b0_d;
+        }else{
+            theme = 'light'
+            r0 = r0_l;
+            g0 = g0_l;
+            b0 = b0_l;
+        }
     }
+    // root.style.setProperty('--border-color', style.getPropertyValue(`--border-color-${theme}`));
+    // root.style.setProperty('--font-color', style.getPropertyValue(`--font-color-${theme}`));
+    root.style.setProperty('--background-color', style.getPropertyValue(`--background-color-${theme}`));
+    root.style.setProperty('--theme-button-background', style.getPropertyValue(`--theme-button-background-${theme}`));
+
+        
+    effect.domElement.style.backgroundColor = style.getPropertyValue(`--background-color-${theme}`);
+    effect.domElement.style.color = `rgb(${r0}, ${g0}, ${b0})`;
+    
+    gsap.to(":root", { 
+        duration: getComputedStyle(root).getPropertyValue('--animation_duration'),
+        '--border-color': getComputedStyle(root).getPropertyValue(`--border-color-${theme}`),
+        '--font-color': getComputedStyle(root).getPropertyValue(`--font-color-${theme}`),
+        '--project-title-color': getComputedStyle(root).getPropertyValue(`--project-title-color-${theme}`),
+        '--blur': getComputedStyle(root).getPropertyValue(`--blur-${theme}`),    
+    });
+
+    // gsap.to(effect.domElement.style, { 
+    //     duration: 0.25,
+    //     backgroundColor: style.getPropertyValue(`--background-color-${theme}`),
+    // });
 }
+
+initTheme(darkTheme);
+
+
 
 function applyTheme(darkTheme){
     if (darkTheme){
-        bgColor = style.getPropertyValue('--background-color-dark');
+        theme = 'dark';
         r0 = r0_d;
         g0 = g0_d;
         b0 = b0_d;
-
-        gsap.to(":root", { 
-            duration: getComputedStyle(root).getPropertyValue('--animation_duration'),
-            '--border-color': getComputedStyle(root).getPropertyValue('--border-color-dark'),
-            '--font-color': getComputedStyle(root).getPropertyValue('--font-color-dark'),
-            '--font-background-color': getComputedStyle(root).getPropertyValue('--font-background-color-dark'),
-            '--background-color': getComputedStyle(root).getPropertyValue('--background-color-dark'),
-            '--theme-button-background': getComputedStyle(root).getPropertyValue('--theme-button-background-dark'),
-        });
-
-
     }else{
-        bgColor = style.getPropertyValue('--background-color-light');
+        theme = 'light';
         r0 = r0_l;
         g0 = g0_l;
         b0 = b0_l;
-
-        gsap.to(":root", { 
-            duration: getComputedStyle(root).getPropertyValue('--animation_duration'),
-            '--border-color': getComputedStyle(root).getPropertyValue('--border-color-light'),
-            '--font-color': getComputedStyle(root).getPropertyValue('--font-color-light'),
-            '--font-background-color': getComputedStyle(root).getPropertyValue('--font-background-color-light'),
-            '--background-color': getComputedStyle(root).getPropertyValue('--background-color-light'),
-            '--theme-button-background': getComputedStyle(root).getPropertyValue('--theme-button-background-light'),    
-        });
-        
     }
+    bgColor = style.getPropertyValue(`--background-color-${theme}`);
+    gsap.to(":root", { 
+        duration: getComputedStyle(root).getPropertyValue('--animation_duration'),
+        '--border-color': getComputedStyle(root).getPropertyValue(`--border-color-${theme}`),
+        '--font-color': getComputedStyle(root).getPropertyValue(`--font-color-${theme}`),
+        '--font-background-color': getComputedStyle(root).getPropertyValue(`--font-background-color-${theme}`),
+        '--background-color': getComputedStyle(root).getPropertyValue(`--background-color-${theme}`),
+        '--theme-button-background': getComputedStyle(root).getPropertyValue(`--theme-button-background-${theme}`),    
+        '--blur': getComputedStyle(root).getPropertyValue(`--blur-${theme}`),    
+        '--project-title-color': getComputedStyle(root).getPropertyValue(`--project-title-color-${theme}`),
+
+    });
+
     gsap.to(effect.domElement.style, { 
         duration: 1,
         backgroundColor: bgColor,
-      });
+    });
     gsap.to(effect.domElement.style, { 
         duration: 1,
         color: `rgb(${r0}, ${g0}, ${b0})`,
-      });
+    });
+    // projectsOverflowIndicator();
+
 }
-initTheme(darkTheme);
 document.body.appendChild(effect.domElement);
 
 // Define noise effect
@@ -237,6 +256,50 @@ function randomRGB(mult, val){
     return val
 }
 
+function controlHeaderVis(tab){
+    if (tab.classList.contains("no-header")){
+        gsap.to('#header', {duration: tabSwitchAnimationDuration, opacity:0});
+    }else{
+        gsap.to('#header', {duration: tabSwitchAnimationDuration, opacity:1, delay:tabSwitchAnimationDuration});
+    }
+};
+
+
+// function projectsOverflowIndicator(){
+//     if (content.scrollHeight > content.offsetHeight) {
+//         console.log('element overflows');
+//         overflowIndicator.style.visibility = 'visible';
+//     }else{
+//         overflowIndicator.style.visibility = 'hidden';
+//     }
+
+// }
+
+// if(document.getElementById('projects-content')){
+//     document.getElementById('projects-content').addEventListener('scroll', event => {
+//         const {scrollHeight, scrollTop, clientHeight} = event.target;
+    
+//         if (Math.abs(scrollHeight - clientHeight - scrollTop) < 1) {
+//             console.log('scrolled');
+//             overflowIndicator.style.visibility = 'hidden';
+    
+    
+    
+//         }else{
+//             console.log('unscrolled');
+//             overflowIndicator.style.visibility = 'visible';
+    
+//         }
+//     });
+// }
+
+// if ( document.getElementById('projects-content') ) {
+//     console.log(element.scrollHeight);
+//     console.log(element.clientHeight);
+//     console.log(element.offsetHeight);
+// }
+
+
 // Define html/css interacting functions
 
 // mouseenter tab
@@ -266,12 +329,9 @@ function toggleTab(selectedTab) {
 
         if (tab.id == selectedTab) {
                 tab.classList.add("is-active");
-                // tab.textContent = tab.textContent.replace(/ </g, '');
-                // tab.textContent += ' <';
                 gsap.to(`#${tab.id}`, {duration: 0.2, text: tab.textContent.split(' ')[0] + " <", delay: 0.1});
-                // gsap.to(`#${tab.id}`, {duration: 0.2, text: tab.textContent.split(' ')[0] + " <", delay: 0.1});
                 gsap.to(`#${tab.id}-content`, {duration: tabSwitchAnimationDuration, display: 'block', opacity: 1, delay: tabSwitchAnimationDuration});
-
+                controlHeaderVis(tab);
         } else {
             onHoverTab(tab);
             if (tab.classList.contains("is-active")) {
@@ -301,6 +361,7 @@ if(active_id) {
         if (tab.id == active_id ) {
             tab.classList.add("is-active");
             gsap.to(`#${tab.id}-content`, {duration: 1, display: 'block', opacity: 1});
+            controlHeaderVis(tab);
 
         }else{
             tab.classList.remove("is-active");
@@ -329,9 +390,8 @@ function switchTheme() {
     darkTheme = (localStorage.getItem("dark_theme") == 'true');
     applyTheme(!darkTheme);
     localStorage.setItem("dark_theme", !darkTheme);
-
   
-  };
+};
 
 document.getElementById("theme_dark").onclick = switchTheme;
 // switchTheme();
@@ -345,11 +405,12 @@ function animate(timeStep) {
     updatePoints(timeStep * timeMult);
     // applyTheme(darkTheme);
     effect.render(scene, camera);
+    
     stats.update();
     if (timeStep > i*500){
-        r0 = randomRGB(0.1, r0);
-        g0 = randomRGB(0.1, g0);
-        b0 = randomRGB(0.1, b0);
+        r0 = randomRGB(0.5, r0);
+        g0 = randomRGB(0.5, g0);
+        b0 = randomRGB(0.5, b0);
         effect.domElement.style.color = `rgb(${r0}, ${g0}, ${b0})`;
         // console.log(`rgb(${r0}, ${g0}, ${b0})`)
         i++;
@@ -374,6 +435,119 @@ function handleWindowResize() {
     gridSizeH =  window.innerHeight/(divider*gap);
     updateArr(gridSizeW, gridSizeH)
     effect.setSize( window.innerWidth, window.innerHeight);
+    // projectsOverflowIndicator();
+
+
+    
 }
 // effect.setSize( window.innerWidth, window.innerHeight );
 window.addEventListener("resize", handleWindowResize, false);
+
+
+
+// ----------------------------------
+function checkOverflow(el)
+{
+    if (el.scrollHeight > el.offsetHeight) {
+        return true;
+    }
+    return false;
+}
+
+
+
+// var element  = document.getElementById('project-content');
+// console.log(element.offsetWidth);
+// console.log(element.clientHeight);
+
+// if (element.scrollHeight > element.offsetHeight) {
+//     console.log('element overflows')
+// }
+
+// ------------------------- Scene 2 
+// let mesh;
+// let projects_h;
+// let projects_w;
+// // let aspect = window.innerWidth / window.innerHeight;
+// let aspect = window.innerWidth / window.innerHeight;
+// projects_h = Math.max(aspect*120, 200);
+// projects_w = Math.max(aspect*150, 200);
+// // projects_w = window.innerWidth/4.75;
+// // projects_h = window.innerHeight/3;
+// // Define Scene
+// const projectsScene = new THREE.Scene();
+// projectsScene.background = new THREE.Color( 0, 0, 0 );
+
+// // Light
+// const pointLight1 = new THREE.PointLight( 0xffffff, 3, 0, 0 );
+// pointLight1.position.set( 500, 500, 500 );
+// projectsScene.add( pointLight1 );
+
+// const pointLight2 = new THREE.PointLight( 0xffffff, 1, 0, 0 );
+// pointLight2.position.set( - 500, - 500, - 500 );
+// projectsScene.add( pointLight2 );
+
+// // 3D model loader
+
+// const loader = new GLTFLoader();
+
+// loader.load( '../models/playstation_controller.glb', function ( gltf ) {
+
+//     mesh = gltf.scene.children[ 0 ];
+//     mesh.material =  new THREE.MeshPhongMaterial( { flatShading: true } );
+//     mesh.position.z = 400;
+//     mesh.position.y = 200;
+//     mesh.rotation.x = -3.1*2;
+
+//     projectsScene.add( mesh );
+//     mesh.scale.multiplyScalar( 10 );
+
+// } );
+
+
+// // Define Camera
+// const projectsCamera = new THREE.PerspectiveCamera( 70, projects_w / projects_h, 1, 1000 );
+// projectsCamera.position.y = 200;
+// projectsCamera.position.z = 470;
+
+// // Define Renderer
+// const projectsRenderer = new THREE.WebGLRenderer();
+// projectsRenderer.setSize(projects_w, projects_h);
+// projectsRenderer.setAnimationLoop( projectsAnimate );
+
+// // Define ascii effect
+// const projectEffect = new AsciiEffect( projectsRenderer,  ' .:-+*=%@#', { invert: true, resolution: 0.4 } );
+// projectEffect.setSize(projects_w, projects_h);
+// projectEffect.domElement.style.color = style.getPropertyValue(`--font-color-${theme}`);
+// projectEffect.domElement.style.backgroundColor = 'transparent';
+
+// document.getElementById("projects-renderer").appendChild( projectEffect.domElement );
+// // document.body.appendChild( projectEffect.domElement );
+// window.addEventListener( 'resize', onWindowResize );
+
+
+// const start = Date.now();
+// function projectsAnimate() {
+
+//     const timer = Date.now() - start;
+//     if( mesh ){
+//         mesh.rotation.y = timer * 0.0009;
+//     }
+
+//     projectEffect.render( projectsScene, projectsCamera );
+
+// }
+
+// function onWindowResize() {
+//     aspect = window.innerWidth / window.innerHeight;
+//     projects_h = Math.max(aspect*120, 200);
+//     projects_w = Math.max(aspect*150, 200);
+
+//     projectsCamera.aspect = projects_w / projects_h;
+//     projectsCamera.updateProjectionMatrix();
+
+//     projectsRenderer.setSize( projects_w, projects_h );
+//     projectEffect.setSize( projects_w, projects_h );
+
+// }
+

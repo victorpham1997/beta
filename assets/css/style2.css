@@ -13,6 +13,7 @@
   --marg-top: 0.35em;
   --theme-ctrl-font-size: 130%;
   --theme-ctrl-box-size: 12px;
+  --title-font-weight: 200;
 
 
 
@@ -78,6 +79,10 @@ strong {
     padding-top: 0;
     padding-bottom: 0;
   }
+  .menu_text{
+    font-size: 1.5rem !important;
+
+  }
 /*   div.banner .is-white{
   color: black !important;
   }*/
@@ -98,8 +103,9 @@ strong {
    :root {
     --marg-top: 0.75em;
     --marg-left: 0.5em;
-    --theme-ctrl-font-size: 1.2em;
+    --theme-ctrl-font-size: 13px;
     --theme-ctrl-box-size: 10px;
+    --title-font-weight: 400;
    }
 
 }
@@ -171,14 +177,14 @@ p.header_title {
   padding: 0;
   line-height: 0.75em;
   font-family: "Raleway", sans-serif;
-  font-weight: 200;
+  font-weight: var(--title-font-weight);
 }
 
 p.header_label {
   margin-top: 1.5% ;
   margin-left: calc(var(--marg-left)*2);
   /* 5vmin; */
-  font-size: min(max(13px,3vw), 20px);
+  font-size: min(max(15px,3vw), 20px);
   color: var(--font-color);
   background-color: var(--background-color);
   display: inline-block;
@@ -208,7 +214,11 @@ p.header_label {
 a.menu_href {
   cursor: default;
   display: inline-block;
-  margin-bottom: 3.5%;
+  margin-bottom: 1rem;
+}
+
+.z-bot {
+  z-index: -999999;
 }
 
 a:has(.is-active) {
@@ -325,7 +335,7 @@ div.nav_box {
 .experience-box {
   /* width: min(calc(-20vw + 1000px), 33.3%) !important; */
   width: fit-content !important;
-  height: 70%;
+  height: 65%;
   overflow: hidden;
 }
 
@@ -476,7 +486,7 @@ div.nav_box {
   margin-left: 1%;
   margin-bottom: 0;
   padding: 0% 4% ;
-  max-height: 75%;
+  max-height: 65%;
   max-width: 95%;
   overflow: auto;
   z-index: -99;

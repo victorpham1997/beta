@@ -9,8 +9,8 @@ gsap.registerPlugin(TextPlugin)
 // Define page to theme mapping
 var themeMap = {
     'art' : ['light', [189,195,199]],
-    'projects' : ['dark', [40, 82, 56]],
-    'ap' : ['dark', [40, 82, 56]]
+    'projects' : ['dark', [0, 35, 0]],
+    'ap' : ['dark', [0, 35, 0]]
   };
 
 // Read from localStorage to obtain theme if needed
@@ -65,7 +65,7 @@ let ascii_set = ' .:/\\@#'
 let ascii_set2 = ' ._/\\0@'
 let ascii_resolution = 0.1;
 // const [r0_d, g0_d, b0_d] = [45,52,54];
-const [r0_d, g0_d, b0_d] = [45, 52, 54];
+const [r0_d, g0_d, b0_d] = [30, 35, 30];
 const [r0_l, g0_l, b0_l] = [189,195,199];
 let bgColor;
 let r0;
@@ -432,9 +432,9 @@ function animate(timeStep) {
     
     // stats.update();
     if (timeStep > i*500){
-        r0 = randomRGB(0.5, r0);
-        g0 = randomRGB(0.5, g0);
-        b0 = randomRGB(0.5, b0);
+        r0 = randomRGB(0.1, r0);
+        g0 = randomRGB(0.1, g0);
+        b0 = randomRGB(0.1, b0);
         effect.domElement.style.color = `rgb(${r0}, ${g0}, ${b0})`;
         // console.log(`rgb(${r0}, ${g0}, ${b0})`)
         i++;

@@ -31,11 +31,14 @@
         </head>
 
 	<body>
-        <!-- <canvas id="three_background" myattr="myattr"></canvas> -->
                 <script type="module" src="../assets/js/three_background.js"></script>
 
                 <div id="container" >
+                        <div class="cr_box shadow">
+                                <i class="fa fa-copyright"  aria-hidden="true"></i> Pham Trung Viet
+                        </div>
                         <div class="option_box">
+
                                 <div class="btn" id="theme_dark" >
                                         <div class="btn_text shadow">Dark</div>
                                         <div class="btn_box"></div>
@@ -57,30 +60,43 @@
                                         </div>
 
                                         <div class="column is-one-third has-text-right menu_box">
-                                                <a href="#about">
-                                                        <p class ="menu_text box"  id="about">About</p>
-                                                </a>
-
-                                                <a href="#experience">
-                                                        <p class ="menu_text box "  id="experience">Experience</p>
-                                                </a>
-
-                                                <a href="#projects">
-                                                        <p class ="menu_text box no-header"  id="projects">Projects</p>
-                                                </a>
                                                 
-                                                <a href="art">
-                                                        <p class ="menu_text box "  id="art">Art</p>
-                                                </a>
+                                                <div>
+                                                        <a class="menu_href" href="#about">
+                                                                <p class ="menu_text box"  id="about">About</p>
+                                                        </a>
+                                                </div>
+                                                <div>
+
+                                                        <a class="menu_href" href="#experience">
+                                                                <p class ="menu_text box "  id="experience">Experience</p>
+                                                        </a>
+                                                </div>
+                                                <div>
+
+                                                        <a class="menu_href" href="#contact">
+                                                                <p class ="menu_text box "  id="contact">Contact/Resume</p>
+                                                        </a>
+                                                </div>
+                                                <div>
+                                                        <a class="menu_href" href="#projects">
+                                                                <p class ="menu_text box no-header"  id="projects">Projects</p>
+                                                        </a>
+                                                </div>
+                                                <div>
+                                                        <a class="menu_href" href="art">
+                                                                <p class ="menu_text box "  id="art">Art</p>
+                                                        </a>
+                                                </div>
                                         </div>
                                         
                                 </div>
                                 <div class="columns ">
                                         <div class="column has-text-left content-box about-box  is-three-quarters-mobile background-blur " id="about-content">
-                                                <p class ="about-text ease" >
-                                                        I am currently working as a Senior Data Engineer at Prudential Service Singapore. I graduated from Singapore University of Technology and Design (SUTD) in 2021 with a Bachelor in Computer Science.
-                                                        When I was young, I used to dream of becoming an architect. But my love for programming grew stronger and stronger until I joined SUTD and decided to take on a CS major.
-                                                        My passion for art, fortunately, is still carrying on as I often find time to do small sketches of things and people that I observe in my daily life.
+                                                <p class ="about-text" >
+                                                        Born in Vietnam, I moved to Singapore in 2015 to study under scholarships. Despite my dream of becoming an architect when I was young, 
+                                                        I developed interest in programming during my secondary school which led to my pursuit of a computer science degree in Singapore University of Technology and Design.
+                                                        I am now a Senior Data Engineer at Prudential but sometimes I still find time to do small sketches of things and people that I observe in my daily life.
                                                 </p>      
 
                                         </div>
@@ -146,7 +162,6 @@
 
                                         
                                         <div class="column content-box is-full is-full-mobile has-text-left background-blur hide-scroll-bar projects-content" id="projects-content">
-
                                                 <div class="fixed-grid projects-box has-7-cols " >
                                                         <a class="grid is-row-gap-3.5" href="bus_widget_ap" >
                                                                 <div class="cell is-col-span-2 word-break" id="cell">/fullstack/android/java</div>
@@ -201,26 +216,67 @@
                                                                 <div class="cell">Feb 2019</div>
                                                                 <div class="cell">research</div>
                                                                 <div class="cell project-title is-col-span-3">rehab.exe</div>
-
+                                                        </a>
                                                         </div>
                                                 </div>
 
                                                 
                                         </div>
-                                        <!-- <div class="content-box overflow-indicator" id="projects-content">
-                                                :
-                                        </div> -->
-                                               
+
                                         
-                                        <div class="column has-text-left content-box is-one-third is-three-quarters-mobile" id="art-content">
-                                                <p class ="about-text ">
-                                                        art
-                                                </p>      
+                                        <div class="column has-text-center contact-box content-box  is-full is-full-mobile" id="contact-content">
+                                                <div class =" contact-primary ">
+                                                        <!-- <a href="mailto:victorpham1997@gmail.com"  ><i class="fas fa-at"></i>
+                                                                victorpham1997@gmail.com
+                                                        </a> -->
+
+                                                        <a href="https://docs.google.com/document/d/1TRCigyv9hfBRg-oTahazPn7CC_vGa6Ha1GUT9M0CuW0/edit?usp=sharing" target="_blank" class="inline-block background-solid " download>
+                                                                <span class="icon">
+                                                                  <i class="fas fa-file-alt"></i>
+                                                                </span>
+                                                                <span>Resume</span>
+                                                        </a>
+                                                        &emsp;&emsp;
+                                                        <a href="https://docs.google.com/document/d/1lGxZLkCp6hxBMPC1ZyHNgW5bz8DWkJ0PcTuL2MXaNCs/edit?usp=sharing" target="_blank" class="inline-block background-solid " download>
+                                                                <span class="icon">
+                                                                  <i class="fas fa-file-alt"></i>
+                                                                </span>
+                                                                <span>履歴書</span>
+                                                        </a>  
+                                                </div>      
+
+                                                <div class =" contact-secondary-left background-blur has-text-left ">
+                                                        <a href="https://medium.com/@victorpham1997" target="_blank" class=" ">
+                                                                <i class="fab fa-medium-m"></i> Medium
+                                                        </a>
+                                                        <a href="https://github.com/victorpham1997" target="_blank" class="">
+                                                                <i class="fab fa-github"></i> Github
+                                                        </a>
+                                                        <a href="https://www.linkedin.com/in/trung-viet-pham/" target="_blank" class="">
+                                                                <i class="fab fa-linkedin"></i> LinkedIn
+                                                        </a>
+                                                      
+                                                        <a href="mailto:victorpham1997@gmail.com" class="mobile" ><i class="fas fa-envelope "></i>
+                                                                victorpham1997@gmail.com
+                                                        </a>
+                                                
+                                                </div> 
+                                                
+                                                <div class =" contact-secondary-right background-blur not-mobile ">
+                                                        <a href="mailto:victorpham1997@gmail.com"  ><i class="fas fa-envelope "></i>
+                                                                victorpham1997@gmail.com
+                                                        </a>
+                                                </div> 
 
                                         </div>
-                                </div>
-                                <!-- <a class="column is-full" href="https://threejs.org" target="_blank" rel="noopener">three.js</a> -->
 
+                                        <!-- <div class="column has-text-left content-box is-one-third is-three-quarters-mobile" id="art-content">
+                                                <p class ="about-text ">
+                                                        
+                                                </p>      
+
+                                        </div> -->
+                                </div>
                         </div>
                 </div>
 

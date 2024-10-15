@@ -8,11 +8,13 @@ gsap.registerPlugin(TextPlugin)
 
 // Define page to theme mapping
 var themeMap = {
-
+    'art' : ['light', [189,195,199]],
+    'projects' : ['dark', [40, 82, 56]],
+    'ap' : ['dark', [40, 82, 56]]
   };
 
 // Read from localStorage to obtain theme if needed
-const currentUrl = window.location.href;
+let currentUrl = window.location.href;
 // if
 
 let darkTheme = localStorage.getItem("dark_theme");
@@ -20,7 +22,7 @@ if (darkTheme==null){
     darkTheme = true;
     localStorage.setItem("dark_theme", darkTheme);
 }else{
-    darkTheme = (darkTheme == 'true');
+    darkTheme = darkTheme === 'true';
 }
 
 
@@ -89,15 +91,28 @@ renderer.setSize(w, h);
 const effect = new AsciiEffect( renderer, ascii_set2, { invert: true, resolution: ascii_resolution } );
 effect.setSize( w, h );
 
-function initTheme(darkTheme){
-    if( Object.keys(themeMap).some(v => currentUrl.includes(v))){
-        var mappedThemeStr = Object.keys(themeMap).find(v => currentUrl.includes(v));
-
+function applyThemeMap (identifyString){
+    // currentUrl = window.location.href;
+    console.log(identifyString);
+    if( Object.keys(themeMap).some(v => identifyString.includes(v))){
+        var mappedThemeStr = Object.keys(themeMap).find(v => identifyString.includes(v));
+        console.log(Object.keys(themeMap));
+        console.log(mappedThemeStr);
+        
         theme = themeMap[mappedThemeStr][0]
         r0 = themeMap[mappedThemeStr][1][0];
         g0 = themeMap[mappedThemeStr][1][1];
         b0 = themeMap[mappedThemeStr][1][2]
-    }else{
+        console.log(`dark_theme is ${theme === "dark"}`)
+        localStorage.setItem("dark_theme", theme === "dark");
+
+        return true;
+    };
+    return false
+}   
+
+function initTheme(darkTheme){
+    if( !applyThemeMap(window.location.href)){
         if(darkTheme){
             theme = 'dark'
             r0 = r0_d;
@@ -113,7 +128,6 @@ function initTheme(darkTheme){
     // root.style.setProperty('--border-color', style.getPropertyValue(`--border-color-${theme}`));
     // root.style.setProperty('--font-color', style.getPropertyValue(`--font-color-${theme}`));
     root.style.setProperty('--background-color', style.getPropertyValue(`--background-color-${theme}`));
-    root.style.setProperty('--theme-button-background', style.getPropertyValue(`--theme-button-background-${theme}`));
 
         
     effect.domElement.style.backgroundColor = style.getPropertyValue(`--background-color-${theme}`);
@@ -125,6 +139,7 @@ function initTheme(darkTheme){
         '--font-color': getComputedStyle(root).getPropertyValue(`--font-color-${theme}`),
         '--project-title-color': getComputedStyle(root).getPropertyValue(`--project-title-color-${theme}`),
         '--blur': getComputedStyle(root).getPropertyValue(`--blur-${theme}`),    
+        '--theme-button-background': getComputedStyle(root).getPropertyValue(`--theme-button-background-${theme}`),    
     });
 
     // gsap.to(effect.domElement.style, { 
@@ -137,18 +152,22 @@ initTheme(darkTheme);
 
 
 
-function applyTheme(darkTheme){
-    if (darkTheme){
-        theme = 'dark';
-        r0 = r0_d;
-        g0 = g0_d;
-        b0 = b0_d;
-    }else{
-        theme = 'light';
-        r0 = r0_l;
-        g0 = g0_l;
-        b0 = b0_l;
+function applyTheme(darkTheme, overwrite = false){
+    if(!overwrite){
+        if (darkTheme){
+            theme = 'dark';
+            r0 = r0_d;
+            g0 = g0_d;
+            b0 = b0_d;
+        }else{
+            theme = 'light';
+            r0 = r0_l;
+            g0 = g0_l;
+            b0 = b0_l;
+        }
+        localStorage.setItem("dark_theme", darkTheme);
     }
+
     bgColor = style.getPropertyValue(`--background-color-${theme}`);
     gsap.to(":root", { 
         duration: getComputedStyle(root).getPropertyValue('--animation_duration'),
@@ -209,8 +228,8 @@ function updateArr(gridW, gridH){
 updateArr(gridSizeW, gridSizeH);
 
 // Define stat tracking 
-let stats = new Stats();
-container.appendChild( stats.dom );
+// let stats = new Stats();
+// container.appendChild( stats.dom );
 
 // Define Points
 const geo = new THREE.BufferGeometry();
@@ -259,7 +278,9 @@ function randomRGB(mult, val){
 function controlHeaderVis(tab){
     if (tab.classList.contains("no-header")){
         gsap.to('#header', {duration: tabSwitchAnimationDuration, opacity:0});
+        gsap.to('#header', {duration: 0, display:'none', delay:tabSwitchAnimationDuration});
     }else{
+        gsap.to('#header', {duration: 0, display:'block'});
         gsap.to('#header', {duration: tabSwitchAnimationDuration, opacity:1, delay:tabSwitchAnimationDuration});
     }
 };
@@ -332,6 +353,10 @@ function toggleTab(selectedTab) {
                 gsap.to(`#${tab.id}`, {duration: 0.2, text: tab.textContent.split(' ')[0] + " <", delay: 0.1});
                 gsap.to(`#${tab.id}-content`, {duration: tabSwitchAnimationDuration, display: 'block', opacity: 1, delay: tabSwitchAnimationDuration});
                 controlHeaderVis(tab);
+                applyThemeMap(tab.id);
+                applyTheme(null, true);
+
+
         } else {
             onHoverTab(tab);
             if (tab.classList.contains("is-active")) {
@@ -387,9 +412,8 @@ tabs.forEach(function(tab) {
 
 function switchTheme() {
     // darkTheme = darkThemeBtn.classList.contains('is-active');
-    darkTheme = (localStorage.getItem("dark_theme") == 'true');
+    darkTheme = localStorage.getItem("dark_theme") === 'true';
     applyTheme(!darkTheme);
-    localStorage.setItem("dark_theme", !darkTheme);
   
 };
 
@@ -406,7 +430,7 @@ function animate(timeStep) {
     // applyTheme(darkTheme);
     effect.render(scene, camera);
     
-    stats.update();
+    // stats.update();
     if (timeStep > i*500){
         r0 = randomRGB(0.5, r0);
         g0 = randomRGB(0.5, g0);
@@ -454,100 +478,6 @@ function checkOverflow(el)
     return false;
 }
 
+// ----------------ART PAGE FUNCTION------------------
 
-
-// var element  = document.getElementById('project-content');
-// console.log(element.offsetWidth);
-// console.log(element.clientHeight);
-
-// if (element.scrollHeight > element.offsetHeight) {
-//     console.log('element overflows')
-// }
-
-// ------------------------- Scene 2 
-// let mesh;
-// let projects_h;
-// let projects_w;
-// // let aspect = window.innerWidth / window.innerHeight;
-// let aspect = window.innerWidth / window.innerHeight;
-// projects_h = Math.max(aspect*120, 200);
-// projects_w = Math.max(aspect*150, 200);
-// // projects_w = window.innerWidth/4.75;
-// // projects_h = window.innerHeight/3;
-// // Define Scene
-// const projectsScene = new THREE.Scene();
-// projectsScene.background = new THREE.Color( 0, 0, 0 );
-
-// // Light
-// const pointLight1 = new THREE.PointLight( 0xffffff, 3, 0, 0 );
-// pointLight1.position.set( 500, 500, 500 );
-// projectsScene.add( pointLight1 );
-
-// const pointLight2 = new THREE.PointLight( 0xffffff, 1, 0, 0 );
-// pointLight2.position.set( - 500, - 500, - 500 );
-// projectsScene.add( pointLight2 );
-
-// // 3D model loader
-
-// const loader = new GLTFLoader();
-
-// loader.load( '../models/playstation_controller.glb', function ( gltf ) {
-
-//     mesh = gltf.scene.children[ 0 ];
-//     mesh.material =  new THREE.MeshPhongMaterial( { flatShading: true } );
-//     mesh.position.z = 400;
-//     mesh.position.y = 200;
-//     mesh.rotation.x = -3.1*2;
-
-//     projectsScene.add( mesh );
-//     mesh.scale.multiplyScalar( 10 );
-
-// } );
-
-
-// // Define Camera
-// const projectsCamera = new THREE.PerspectiveCamera( 70, projects_w / projects_h, 1, 1000 );
-// projectsCamera.position.y = 200;
-// projectsCamera.position.z = 470;
-
-// // Define Renderer
-// const projectsRenderer = new THREE.WebGLRenderer();
-// projectsRenderer.setSize(projects_w, projects_h);
-// projectsRenderer.setAnimationLoop( projectsAnimate );
-
-// // Define ascii effect
-// const projectEffect = new AsciiEffect( projectsRenderer,  ' .:-+*=%@#', { invert: true, resolution: 0.4 } );
-// projectEffect.setSize(projects_w, projects_h);
-// projectEffect.domElement.style.color = style.getPropertyValue(`--font-color-${theme}`);
-// projectEffect.domElement.style.backgroundColor = 'transparent';
-
-// document.getElementById("projects-renderer").appendChild( projectEffect.domElement );
-// // document.body.appendChild( projectEffect.domElement );
-// window.addEventListener( 'resize', onWindowResize );
-
-
-// const start = Date.now();
-// function projectsAnimate() {
-
-//     const timer = Date.now() - start;
-//     if( mesh ){
-//         mesh.rotation.y = timer * 0.0009;
-//     }
-
-//     projectEffect.render( projectsScene, projectsCamera );
-
-// }
-
-// function onWindowResize() {
-//     aspect = window.innerWidth / window.innerHeight;
-//     projects_h = Math.max(aspect*120, 200);
-//     projects_w = Math.max(aspect*150, 200);
-
-//     projectsCamera.aspect = projects_w / projects_h;
-//     projectsCamera.updateProjectionMatrix();
-
-//     projectsRenderer.setSize( projects_w, projects_h );
-//     projectEffect.setSize( projects_w, projects_h );
-
-// }
 
